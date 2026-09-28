@@ -92,8 +92,9 @@ function renderQuestion() {
   const item = questions[currentQuestion];
   currentLevelPassed = false;
   elements.progress.textContent = `Nivel ${currentQuestion + 1} de ${questions.length}`;
-  elements.progressBar.style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
-  elements.avatar.style.left = `${(currentQuestion / (questions.length - 1)) * 100}%`;
+  elements.progressBar.style.width = `${(currentQuestion / questions.length) * 100}%`;
+  elements.avatar.style.left = `${(currentQuestion / questions.length) * 100}%`;
+  elements.avatar.classList.remove("is-celebrating");
   elements.avatarMessage.textContent = `¡Hola! Estoy en el nivel ${currentQuestion + 1}. Ayúdame a elegir una acción virtuosa para avanzar.`;
   elements.score.textContent = score; elements.virtue.textContent = item.virtue; elements.question.textContent = item.question;
   elements.answers.replaceChildren(); elements.feedback.hidden = true; elements.nextButton.hidden = true;
@@ -118,6 +119,10 @@ function selectAnswer(selectedIndex) {
   if (isCorrect) {
     score += 1;
     currentLevelPassed = true;
+    const completedProgress = ((currentQuestion + 1) / questions.length) * 100;
+    elements.progressBar.style.width = `${completedProgress}%`;
+    elements.avatar.style.left = `${completedProgress}%`;
+    elements.avatar.classList.add("is-celebrating");
   }
   elements.score.textContent = score;
   elements.feedback.className = `feedback ${isCorrect ? "feedback-correct" : "feedback-incorrect"}`;
