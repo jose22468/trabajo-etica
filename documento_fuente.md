@@ -13,18 +13,17 @@
 
 ## Explicación del juego
 
-**Ruta de las Virtudes** es una aventura web de exploración libre. El jugador controla una personita con las flechas o las teclas W, A, S y D, se acerca a dos cristales de pregunta en cada uno de los cinco territorios y responde correctamente para activar el portal del nivel. Sócrates y Aristóteles aparecen como guías con pistas filosóficas. Después de superar los cinco territorios, el jugador enfrenta a la **Sombra del Vicio**, un jefe final que propone tres retos sobre virtud, hábito y bien común.
+**Ruta de las Virtudes** es un juego web de diez niveles con preguntas de opción múltiple. Una personita acompaña al jugador en una ruta visual: solo avanza al siguiente nivel cuando se elige la respuesta virtuosa. Si la respuesta no es correcta, recibe una explicación y puede intentar el mismo nivel de nuevo. Las situaciones escolares, digitales y comunitarias relacionan el buen obrar con virtudes humanas y compromiso social.
 
 El juego parte de la idea aristotélica de que la virtud ética es una disposición que se adquiere mediante la práctica: elegir bien repetidamente forma el carácter. Cuando corresponde, se muestra la virtud como un término medio razonado, alejado de excesos y defectos.
 
 ## Instrucciones
 
 1. Seleccione **Comenzar el juego**.
-2. Mueva a la personita libremente con las flechas o las teclas W, A, S y D.
-3. Acérquese a los dos cristales de pregunta de cada territorio y elija una respuesta.
-4. Si falla, lea la explicación, cierre el reto y vuelva a intentarlo.
-5. Al resolver ambos retos se activa el portal; selecciónelo para pasar al siguiente nivel.
-6. Responda correctamente los tres retos de la Sombra del Vicio para completar la aventura.
+2. Lea cada situación y elija una de cuatro respuestas.
+3. Para superar un nivel, ayude a la personita a seleccionar la respuesta correcta.
+4. Si falla, lea la explicación y pulse **Intentar este nivel de nuevo**.
+5. Complete los diez niveles y consulte el puntaje final.
 
 ## Enlace de acceso al juego
 

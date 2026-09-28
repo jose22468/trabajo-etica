@@ -3,48 +3,59 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Aventura interactiva sobre virtudes humanas y compromiso social." />
+    <meta name="description" content="Juego educativo sobre virtudes humanas y compromiso social." />
     <title>Ruta de las Virtudes</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <main class="app-shell" aria-labelledby="game-title">
-      <header class="site-header"><p class="eyebrow">Aventura filosófica</p><h1 id="game-title">Ruta de las Virtudes</h1></header>
+      <header class="site-header">
+        <p class="eyebrow">Aprende jugando</p>
+        <h1 id="game-title">Ruta de las Virtudes</h1>
+        <p class="subtitle">Decide cómo obrar bien en situaciones cotidianas y comunitarias.</p>
+      </header>
 
       <section id="start-screen" class="card screen" aria-labelledby="start-heading">
-        <div class="hero-characters" aria-hidden="true"><span>🧑🏽‍🚀</span><span>🧔🏻</span><span>🏛️</span></div>
-        <h2 id="start-heading">Una aventura para obrar bien</h2>
-        <p>Guía a tu explorador por cinco territorios. Sócrates y Aristóteles te darán pistas; responde los retos para abrir los portales. Al final enfrentarás a la <strong>Sombra del Vicio</strong>.</p>
-        <ul class="instructions"><li>Muévete libremente con <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> o las flechas.</li><li>Acércate a los cristales de pregunta para abrir un reto.</li><li>Responde correctamente todos los retos para activar el portal del nivel.</li></ul>
-        <button id="start-button" class="button button-primary" type="button">Comenzar aventura</button>
+        <div class="virtue-icon" aria-hidden="true">✦</div>
+        <h2 id="start-heading">Tu misión</h2>
+        <p>Recorre diez desafíos. Elige la acción más virtuosa y descubre cómo los buenos hábitos ayudan a construir una comunidad mejor.</p>
+        <ul class="instructions">
+          <li>Lee cada situación con atención.</li>
+          <li>Selecciona una de las cuatro opciones.</li>
+          <li>Consulta la explicación y continúa tu ruta.</li>
+        </ul>
+        <button id="start-button" class="button button-primary" type="button">Comenzar el juego</button>
       </section>
 
-      <section id="game-screen" class="screen" hidden aria-label="Aventura de virtudes">
-        <div class="game-status"><p id="level-text">Nivel 1: Prudencia</p><p>Retos: <strong id="challenge-count">0/2</strong></p></div>
-        <div id="game-world" class="game-world" tabindex="0" aria-label="Zona de juego. Usa las flechas o W A S D para mover al explorador.">
-          <div class="world-decor decor-one" aria-hidden="true"></div><div class="world-decor decor-two" aria-hidden="true"></div>
-          <div id="guide" class="guide" role="img" aria-label="Guía filósofo"><span id="guide-icon" aria-hidden="true">🧔🏻</span><span id="guide-name">Sócrates</span></div>
-          <div id="guide-speech" class="guide-speech" aria-live="polite"></div>
-          <div id="question-nodes" aria-label="Retos del nivel"></div>
-          <button id="portal" class="portal" type="button" disabled aria-label="Portal bloqueado">◉<span>Portal</span></button>
-          <div id="player" class="player" role="img" aria-label="Tu explorador">🧑🏽‍🚀</div>
+      <section id="quiz-screen" class="card screen" hidden aria-labelledby="question-heading">
+        <div class="game-status" aria-label="Estado del juego">
+          <p id="progress-text" class="progress-text">Nivel 1 de 10</p>
+          <p class="score">Puntaje: <strong id="score">0</strong><span aria-hidden="true"> / </span><span class="sr-only"> de </span><span id="total-score">10</span></p>
         </div>
-        <p class="movement-help">Explora con las flechas o W, A, S y D. El portal se activa al responder todos los retos.</p>
+        <div class="progress-track" aria-hidden="true"><div id="progress-bar" class="progress-bar"></div></div>
+        <div class="journey" aria-label="Ruta de progreso del personaje">
+          <div class="journey-path" aria-hidden="true"></div>
+          <span id="avatar" class="avatar" aria-hidden="true"></span>
+          <span class="journey-start" aria-hidden="true"></span>
+          <span class="journey-goal" aria-hidden="true"></span>
+        </div>
+        <p id="avatar-message" class="avatar-message" aria-live="polite"></p>
+        <p id="virtue-tag" class="virtue-tag">Prudencia</p>
+        <h2 id="question-heading" tabindex="-1"></h2>
+        <div id="answers" class="answers" role="group" aria-label="Opciones de respuesta"></div>
+        <div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div>
+        <button id="next-button" class="button button-primary" type="button" hidden>Siguiente desafío</button>
       </section>
 
       <section id="end-screen" class="card screen" hidden aria-labelledby="end-heading">
-        <div class="hero-characters" aria-hidden="true"><span>🏆</span><span>🧑🏽‍🚀</span></div>
-        <h2 id="end-heading" tabindex="-1">¡La ciudad está a salvo!</h2>
-        <p id="final-message"></p><button id="restart-button" class="button button-primary" type="button">Jugar otra vez</button>
+        <div class="virtue-icon" aria-hidden="true">🏅</div>
+        <h2 id="end-heading">¡Terminaste la ruta!</h2>
+        <p id="final-message" class="final-message"></p>
+        <p class="final-score">Resultado: <strong id="final-score">0</strong> de <span id="final-total">10</span>.</p>
+        <p>La virtud se fortalece al practicar elecciones equilibradas y orientadas al bien común.</p>
+        <button id="restart-button" class="button button-primary" type="button">Jugar de nuevo</button>
       </section>
     </main>
-
-    <section id="question-modal" class="modal" hidden aria-labelledby="modal-title" aria-modal="true" role="dialog">
-      <div class="modal-card"><p id="modal-virtue" class="virtue-tag"></p><h2 id="modal-title"></h2><div id="modal-answers" class="answers"></div><div id="modal-feedback" class="feedback" role="status" aria-live="polite" hidden></div><button id="close-modal" class="button button-primary" type="button" hidden>Continuar explorando</button></div>
-    </section>
-    <section id="boss-modal" class="modal" hidden aria-labelledby="boss-title" aria-modal="true" role="dialog">
-      <div class="modal-card boss-card"><p class="virtue-tag">Jefe final · Sombra del Vicio</p><div class="boss-figure" aria-hidden="true">👾</div><h2 id="boss-title">La sombra desafía tu carácter</h2><p id="boss-intro">Responde sus tres retos para devolver la luz a la ciudad.</p><div id="boss-answers" class="answers"></div><div id="boss-feedback" class="feedback" role="status" aria-live="polite" hidden></div><button id="boss-next" class="button button-primary" type="button" hidden>Continuar combate</button></div>
-    </section>
     <script src="script.js"></script>
   </body>
 </html>
