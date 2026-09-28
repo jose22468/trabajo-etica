@@ -13,7 +13,7 @@
 
 ## Explicación del juego
 
-**Ruta de las Virtudes** es un juego web de diez preguntas de opción múltiple. Propone situaciones escolares, digitales y comunitarias para relacionar el buen obrar con virtudes humanas y con el compromiso social. Después de cada respuesta, el jugador recibe retroalimentación que explica la alternativa virtuosa y al final obtiene su puntaje.
+**Ruta de las Virtudes** es un juego web de diez niveles con preguntas de opción múltiple. Una personita acompaña al jugador en una ruta visual: solo avanza al siguiente nivel cuando se elige la respuesta virtuosa. Si la respuesta no es correcta, recibe una explicación y puede intentar el mismo nivel de nuevo. Las situaciones escolares, digitales y comunitarias relacionan el buen obrar con virtudes humanas y compromiso social.
 
 El juego parte de la idea aristotélica de que la virtud ética es una disposición que se adquiere mediante la práctica: elegir bien repetidamente forma el carácter. Cuando corresponde, se muestra la virtud como un término medio razonado, alejado de excesos y defectos.
 
@@ -21,8 +21,9 @@ El juego parte de la idea aristotélica de que la virtud ética es una disposici
 
 1. Seleccione **Comenzar el juego**.
 2. Lea cada situación y elija una de cuatro respuestas.
-3. Revise la retroalimentación antes de pulsar **Siguiente desafío**.
-4. Complete las diez preguntas y consulte el puntaje final.
+3. Para superar un nivel, ayude a la personita a seleccionar la respuesta correcta.
+4. Si falla, lea la explicación y pulse **Intentar este nivel de nuevo**.
+5. Complete los diez niveles y consulte el puntaje final.
 
 ## Enlace de acceso al juego
 
