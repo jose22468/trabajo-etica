@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="es">
+  <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Juego de supervivencia sobre virtudes."><title>Virtudes: Supervivencia Cuadrada</title><link rel="stylesheet" href="styles.css"></head>
+  <body>
+    <main class="app-shell">
+      <header><p class="eyebrow">Juego de acción y filosofía</p><h1>Virtudes: Supervivencia Cuadrada</h1><p class="subtitle">Sobrevive a los vicios, consigue mejoras y protege la ciudad.</p></header>
+      <section id="start-screen" class="card" aria-labelledby="start-title"><h2 id="start-title">El cuadrado rojo necesita tu ayuda</h2><p>Muévete, esquiva y derrota oleadas de cuadrados enemigos. Busca al <strong>cuadrado verde</strong>: con <kbd>E</kbd> puedes pedirle una mejora. Pero para obtenerla tendrás que responder una pregunta sobre virtudes.</p><ul><li><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> o flechas: mover.</li><li>El cuadrado rojo ataca automáticamente al enemigo más cercano.</li><li><kbd>E</kbd> junto al cuadrado verde: responder una pregunta para una mejora o una maldición.</li></ul><button id="start-button" class="button" type="button">Jugar</button></section>
+      <section id="game-screen" hidden aria-label="Zona de juego"><div class="hud"><p>Vida <strong id="health">100</strong></p><p>Nivel <strong id="level">1</strong></p><p>Tiempo <strong id="time">90</strong>s</p><p id="status" aria-live="polite">Sobrevive.</p></div><canvas id="game-canvas" width="800" height="500" tabindex="0" aria-label="Campo de batalla. Usa las flechas o W A S D para mover el cuadrado rojo."></canvas><div class="legend"><span class="red">■</span> Tú <span class="green">■</span> Guía de mejoras <span class="yellow">■</span> Bajo peligro <span class="orange">■</span> Medio <span class="purple">■</span> Alto <span class="black">■</span> Élite</div></section>
+      <section id="end-screen" class="card" hidden aria-labelledby="end-title"><h2 id="end-title" tabindex="-1"></h2><p id="end-message"></p><button id="restart-button" class="button" type="button">Jugar otra vez</button></section>
+    </main>
+    <section id="question-modal" class="modal" hidden aria-modal="true" role="dialog" aria-labelledby="question-title"><div class="modal-card"><p class="eyebrow">El cuadrado verde pregunta</p><h2 id="question-title"></h2><div id="answers" class="answers"></div><div id="feedback" class="feedback" aria-live="polite" hidden></div><button id="continue-button" class="button" type="button" hidden>Volver al combate</button></div></section>
+    <script src="script.js"></script>
+  </body>
+</html>
