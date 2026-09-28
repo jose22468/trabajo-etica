@@ -74,12 +74,13 @@ const questions = [
 const elements = {
   start: document.querySelector("#start-screen"), quiz: document.querySelector("#quiz-screen"), end: document.querySelector("#end-screen"),
   startButton: document.querySelector("#start-button"), restartButton: document.querySelector("#restart-button"), nextButton: document.querySelector("#next-button"),
-  progress: document.querySelector("#progress-text"), progressBar: document.querySelector("#progress-bar"), score: document.querySelector("#score"),
+  progress: document.querySelector("#progress-text"), progressBar: document.querySelector("#progress-bar"), score: document.querySelector("#score"), avatar: document.querySelector("#avatar"), avatarMessage: document.querySelector("#avatar-message"),
   virtue: document.querySelector("#virtue-tag"), question: document.querySelector("#question-heading"), answers: document.querySelector("#answers"),
   feedback: document.querySelector("#feedback"), finalScore: document.querySelector("#final-score"), finalTotal: document.querySelector("#final-total"), finalMessage: document.querySelector("#final-message"),
 };
 let currentQuestion = 0;
 let score = 0;
+let currentLevelPassed = false;
 
 function startGame() {
   currentQuestion = 0; score = 0;
@@ -89,8 +90,11 @@ function startGame() {
 
 function renderQuestion() {
   const item = questions[currentQuestion];
-  elements.progress.textContent = `Pregunta ${currentQuestion + 1} de ${questions.length}`;
+  currentLevelPassed = false;
+  elements.progress.textContent = `Nivel ${currentQuestion + 1} de ${questions.length}`;
   elements.progressBar.style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+  elements.avatar.style.left = `${(currentQuestion / (questions.length - 1)) * 100}%`;
+  elements.avatarMessage.textContent = `¡Hola! Estoy en el nivel ${currentQuestion + 1}. Ayúdame a elegir una acción virtuosa para avanzar.`;
   elements.score.textContent = score; elements.virtue.textContent = item.virtue; elements.question.textContent = item.question;
   elements.answers.replaceChildren(); elements.feedback.hidden = true; elements.nextButton.hidden = true;
   item.answers.forEach((answer, index) => {
@@ -111,16 +115,28 @@ function selectAnswer(selectedIndex) {
     if (index === selectedIndex && index !== item.correct) button.classList.add("is-incorrect");
   });
   const isCorrect = selectedIndex === item.correct;
-  if (isCorrect) score += 1;
+  if (isCorrect) {
+    score += 1;
+    currentLevelPassed = true;
+  }
   elements.score.textContent = score;
   elements.feedback.className = `feedback ${isCorrect ? "feedback-correct" : "feedback-incorrect"}`;
-  elements.feedback.innerHTML = `<strong>${isCorrect ? "¡Respuesta correcta!" : "Aún no."}</strong> ${item.explanation}`;
+  elements.feedback.innerHTML = `<strong>${isCorrect ? "¡Nivel superado!" : "Aún no superas este nivel."}</strong> ${item.explanation}`;
   elements.feedback.hidden = false;
-  elements.nextButton.textContent = currentQuestion === questions.length - 1 ? "Ver mi resultado" : "Siguiente desafío";
+  elements.avatarMessage.textContent = isCorrect
+    ? `¡Lo logramos! Avanzamos al siguiente nivel gracias a una decisión virtuosa.`
+    : `Necesitamos intentarlo otra vez: elige una respuesta diferente para ayudarme a avanzar.`;
+  elements.nextButton.textContent = isCorrect
+    ? (currentQuestion === questions.length - 1 ? "Ver mi resultado" : "Avanzar de nivel")
+    : "Intentar este nivel de nuevo";
   elements.nextButton.hidden = false; elements.nextButton.focus();
 }
 
 function nextQuestion() {
+  if (!currentLevelPassed) {
+    renderQuestion();
+    return;
+  }
   currentQuestion += 1;
   if (currentQuestion < questions.length) renderQuestion(); else showResults();
 }

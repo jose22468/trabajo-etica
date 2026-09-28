@@ -29,10 +29,17 @@
 
       <section id="quiz-screen" class="card screen" hidden aria-labelledby="question-heading">
         <div class="game-status" aria-label="Estado del juego">
-          <p id="progress-text" class="progress-text">Pregunta 1 de 10</p>
+          <p id="progress-text" class="progress-text">Nivel 1 de 10</p>
           <p class="score">Puntaje: <strong id="score">0</strong><span aria-hidden="true"> / </span><span class="sr-only"> de </span><span id="total-score">10</span></p>
         </div>
         <div class="progress-track" aria-hidden="true"><div id="progress-bar" class="progress-bar"></div></div>
+        <div class="journey" aria-label="Ruta de progreso del personaje">
+          <div class="journey-path" aria-hidden="true"></div>
+          <span id="avatar" class="avatar" aria-hidden="true">🧑🏽‍🚀</span>
+          <span class="journey-start" aria-hidden="true">🏠</span>
+          <span class="journey-goal" aria-hidden="true">🏆</span>
+        </div>
+        <p id="avatar-message" class="avatar-message" aria-live="polite"></p>
         <p id="virtue-tag" class="virtue-tag">Prudencia</p>
         <h2 id="question-heading" tabindex="-1"></h2>
         <div id="answers" class="answers" role="group" aria-label="Opciones de respuesta"></div>
