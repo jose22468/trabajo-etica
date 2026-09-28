@@ -1,1124 +1,507 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Virtudópolis: La Odisea del Buen Obrar</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  :root {
-    --prudencia: #4a9eff;
-    --justicia: #ffd93d;
-    --fortaleza: #ff4757;
-    --templanza: #2ed573;
-    --solidaridad: #a55eea;
-    --comunidad: #ff9f43;
-    --bg-dark: #0a0e27;
-    --bg-mid: #1a1f4e;
-    --text: #e8eaf6;
-    --text-dim: #a0a8c9;
-    --glass: rgba(25, 30, 60, 0.75);
-    --border: rgba(120, 140, 220, 0.25);
-  }
-
-  html, body {
-    min-height: 100vh;
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    color: var(--text);
-    background: radial-gradient(ellipse at top, #1a1f4e 0%, #0a0e27 55%, #04070f 100%);
-    overflow-x: hidden;
-    line-height: 1.5;
-  }
-
-  /* Fondo animado con partículas */
-  #stars {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    background-image:
-      radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.6), transparent),
-      radial-gradient(1px 1px at 70% 60%, rgba(160,200,255,0.5), transparent),
-      radial-gradient(2px 2px at 40% 80%, rgba(255,220,150,0.5), transparent),
-      radial-gradient(1px 1px at 85% 20%, rgba(255,255,255,0.4), transparent),
-      radial-gradient(1.5px 1.5px at 10% 70%, rgba(200,180,255,0.5), transparent),
-      radial-gradient(1px 1px at 55% 15%, rgba(255,255,255,0.5), transparent);
-    background-size: 200% 200%;
-    animation: drift 60s linear infinite;
-  }
-  @keyframes drift {
-    from { background-position: 0% 0%; }
-    to { background-position: 100% 100%; }
-  }
-
-  .screen {
-    position: relative;
-    z-index: 1;
-    min-height: 100vh;
-    display: none;
-    padding: 24px 20px 40px;
-    animation: fadeIn 0.6s ease;
-  }
-  .screen.active { display: block; }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* ------------ LANDING ------------ */
-  .landing-wrap {
-    max-width: 780px;
-    margin: 0 auto;
-    padding: 40px 24px;
-    text-align: center;
-  }
-  .logo-badge {
-    display: inline-block;
-    padding: 6px 16px;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    font-size: 0.78rem;
-    letter-spacing: 2px;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    margin-bottom: 24px;
-  }
-  h1.title {
-    font-size: clamp(2rem, 5vw, 3.4rem);
-    background: linear-gradient(135deg, #4a9eff 0%, #a55eea 40%, #ffd93d 75%, #ff4757 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-weight: 900;
-    letter-spacing: -1px;
-    margin-bottom: 8px;
-    line-height: 1.1;
-  }
-  .subtitle {
-    color: var(--text-dim);
-    font-size: 1.05rem;
-    margin-bottom: 36px;
-    font-style: italic;
-  }
-
-  .intro-box {
-    background: var(--glass);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 28px;
-    text-align: left;
-    margin-bottom: 28px;
-    backdrop-filter: blur(10px);
-  }
-  .intro-box h3 {
-    color: #ffd93d;
-    margin-bottom: 12px;
-    font-size: 1.1rem;
-    letter-spacing: 1px;
-  }
-  .intro-box p {
-    color: var(--text-dim);
-    margin-bottom: 12px;
-    font-size: 0.95rem;
-  }
-  .intro-box ul {
-    list-style: none;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 10px;
-    margin-top: 16px;
-  }
-  .intro-box ul li {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 12px;
-    background: rgba(74, 158, 255, 0.08);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    font-size: 0.88rem;
-  }
-
-  .btn {
-    display: inline-block;
-    padding: 16px 40px;
-    border: none;
-    border-radius: 12px;
-    font-size: 1.05rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    font-family: inherit;
-    background: linear-gradient(135deg, #4a9eff, #a55eea);
-    color: white;
-    box-shadow: 0 8px 30px rgba(74, 158, 255, 0.35);
-  }
-  .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 40px rgba(165, 94, 234, 0.5);
-  }
-  .btn:active { transform: translateY(0); }
-
-  .credits {
-    margin-top: 32px;
-    font-size: 0.8rem;
-    color: var(--text-dim);
-    border-top: 1px solid var(--border);
-    padding-top: 20px;
-  }
-  .credits strong { color: var(--text); }
-
-  /* ------------ GAME SCREEN ------------ */
-  .game-wrap {
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-
-  .topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: var(--glass);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 14px 20px;
-    margin-bottom: 18px;
-    backdrop-filter: blur(10px);
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-  .week-badge {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.95rem;
-  }
-  .week-badge .num {
-    background: linear-gradient(135deg, #4a9eff, #a55eea);
-    padding: 4px 12px;
-    border-radius: 8px;
-    font-weight: 900;
-    font-size: 1rem;
-  }
-
-  .community-meter {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex: 1;
-    min-width: 240px;
-  }
-  .community-meter .label {
-    font-size: 0.82rem;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-  .community-bar {
-    flex: 1;
-    height: 12px;
-    background: rgba(255,255,255,0.08);
-    border-radius: 999px;
-    overflow: hidden;
-    position: relative;
-  }
-  .community-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #ff4757, #ff9f43, #2ed573);
-    width: 50%;
-    border-radius: 999px;
-    transition: width 0.7s cubic-bezier(.4,0,.2,1);
-  }
-  .community-value {
-    font-weight: 900;
-    color: #ff9f43;
-    font-size: 1.05rem;
-    min-width: 40px;
-    text-align: right;
-  }
-
-  /* Panel de virtudes */
-  .virtues-panel {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-    gap: 12px;
-    margin-bottom: 18px;
-  }
-  .virtue {
-    background: var(--glass);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 12px 14px;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-  }
-  .virtue::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--vc);
-    opacity: 0.9;
-  }
-  .virtue:hover { transform: translateY(-2px); }
-  .virtue .vhead {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-  }
-  .virtue .vname {
-    font-size: 0.82rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    color: var(--vc);
-  }
-  .virtue .vicon { font-size: 1.1rem; }
-  .virtue .vbar {
-    height: 8px;
-    background: rgba(255,255,255,0.08);
-    border-radius: 999px;
-    overflow: hidden;
-    margin-bottom: 6px;
-  }
-  .virtue .vfill {
-    height: 100%;
-    background: var(--vc);
-    border-radius: 999px;
-    transition: width 0.7s cubic-bezier(.4,0,.2,1);
-    box-shadow: 0 0 12px var(--vc);
-  }
-  .virtue .vvalue {
-    font-size: 0.78rem;
-    color: var(--text-dim);
-    text-align: right;
-    font-weight: 700;
-  }
-
-  /* Carta de evento */
-  .event-card {
-    background: linear-gradient(160deg, rgba(30,36,72,0.95), rgba(15,20,45,0.95));
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 32px 28px;
-    margin-bottom: 20px;
-    backdrop-filter: blur(10px);
-    position: relative;
-    overflow: hidden;
-    animation: cardIn 0.5s ease;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
-  }
-  @keyframes cardIn {
-    from { opacity: 0; transform: translateY(20px) scale(0.98); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-  }
-  .event-card::before {
-    content: '';
-    position: absolute;
-    top: -50%; left: -50%;
-    width: 200%; height: 200%;
-    background: radial-gradient(circle at 30% 20%, rgba(74,158,255,0.15), transparent 50%);
-    pointer-events: none;
-  }
-  .event-emoji {
-    font-size: 3.2rem;
-    text-align: center;
-    margin-bottom: 12px;
-    filter: drop-shadow(0 0 20px rgba(255,215,100,0.4));
-    animation: pulse 2.5s ease-in-out infinite;
-  }
-  @keyframes pulse {
-    0%,100% { transform: scale(1); }
-    50% { transform: scale(1.08); }
-  }
-  .event-title {
-    text-align: center;
-    font-size: 1.4rem;
-    font-weight: 800;
-    margin-bottom: 12px;
-    color: #fff;
-    letter-spacing: 0.5px;
-  }
-  .event-desc {
-    text-align: center;
-    color: var(--text-dim);
-    font-size: 1rem;
-    max-width: 640px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* Acciones */
-  .actions {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-  .action-btn {
-    background: var(--glass);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 18px 20px;
-    text-align: left;
-    color: var(--text);
-    font-family: inherit;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    backdrop-filter: blur(10px);
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    line-height: 1.45;
-  }
-  .action-btn:hover {
-    background: rgba(74,158,255,0.15);
-    border-color: rgba(74,158,255,0.5);
-    transform: translateX(4px);
-    box-shadow: 0 8px 24px rgba(74,158,255,0.2);
-  }
-  .action-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-  }
-  .action-num {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 30px; height: 30px;
-    border-radius: 8px;
-    background: linear-gradient(135deg, #4a9eff, #a55eea);
-    font-weight: 900;
-    font-size: 0.9rem;
-    flex-shrink: 0;
-  }
-
-  /* Toast de feedback */
-  #feedback {
-    position: fixed;
-    top: 24px;
-    left: 50%;
-    transform: translateX(-50%) translateY(-100px);
-    background: var(--glass);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 16px 24px;
-    max-width: 460px;
-    color: var(--text);
-    font-size: 0.92rem;
-    backdrop-filter: blur(15px);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-    transition: transform 0.4s ease, opacity 0.4s ease;
-    opacity: 0;
-    z-index: 100;
-    text-align: center;
-  }
-  #feedback.show {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1;
-  }
-  #feedback.good { border-color: #2ed573; box-shadow: 0 12px 40px rgba(46,213,115,0.3); }
-  #feedback.bad { border-color: #ff4757; box-shadow: 0 12px 40px rgba(255,71,87,0.3); }
-
-  /* Efectos flotantes */
-  .float-effect {
-    position: fixed;
-    font-weight: 900;
-    font-size: 1.2rem;
-    pointer-events: none;
-    z-index: 200;
-    animation: floatUp 1.4s ease forwards;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.8);
-  }
-  @keyframes floatUp {
-    0% { opacity: 0; transform: translateY(0) scale(0.8); }
-    20% { opacity: 1; transform: translateY(-10px) scale(1.1); }
-    100% { opacity: 0; transform: translateY(-70px) scale(1); }
-  }
-
-  /* ------------ END SCREEN ------------ */
-  .end-wrap {
-    max-width: 700px;
-    margin: 0 auto;
-    text-align: center;
-    padding: 40px 20px;
-  }
-  .end-emoji {
-    font-size: 5rem;
-    margin-bottom: 16px;
-    filter: drop-shadow(0 0 30px rgba(255,215,100,0.5));
-    animation: pulse 2s ease-in-out infinite;
-  }
-  .end-title {
-    font-size: 2rem;
-    font-weight: 900;
-    margin-bottom: 12px;
-    letter-spacing: 1px;
-  }
-  .end-title.win { color: #2ed573; text-shadow: 0 0 30px rgba(46,213,115,0.5); }
-  .end-title.lose { color: #ff4757; text-shadow: 0 0 30px rgba(255,71,87,0.5); }
-  .end-text {
-    color: var(--text-dim);
-    font-size: 1rem;
-    margin-bottom: 28px;
-    max-width: 520px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .end-stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 12px;
-    margin-bottom: 28px;
-  }
-  .end-stat {
-    background: var(--glass);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px 10px;
-    backdrop-filter: blur(10px);
-  }
-  .end-stat .k {
-    font-size: 0.75rem;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 6px;
-  }
-  .end-stat .v {
-    font-size: 1.5rem;
-    font-weight: 900;
-  }
-
-  /* Responsive */
-  @media (max-width: 600px) {
-    .event-card { padding: 24px 20px; }
-    .event-title { font-size: 1.15rem; }
-    .event-emoji { font-size: 2.5rem; }
-    .btn { padding: 14px 28px; font-size: 0.95rem; }
-    .intro-box { padding: 20px; }
-  }
-</style>
-</head>
-<body>
-<div id="stars"></div>
-
-<!-- =================== LANDING =================== -->
-<section id="screen-landing" class="screen active">
-  <div class="landing-wrap">
-    <div class="logo-badge">Ética · Aristóteles · Virtudes Humanas</div>
-    <h1 class="title">Virtudópolis</h1>
-    <p class="subtitle">La Odisea del Buen Obrar</p>
-
-    <div class="intro-box">
-      <h3>🏛️ La ciudad te necesita</h3>
-      <p>Eres uno de los <strong>Guardianes de la Virtud</strong> de Virtudópolis, una ciudad que ha olvidado el buen obrar. Durante <strong>12 semanas</strong> enfrentarás eventos comunitarios y deberás tomar decisiones que afectarán a las <strong>5 virtudes aristotélicas</strong> y al <strong>Compromiso Social</strong>.</p>
-      <p>No basta con saber qué es una virtud: <em>hay que practicarla</em> (Aristóteles, <em>Ética a Nicómaco</em>). Cada acción tiene consecuencias y debes equilibrar las virtudes para no descuidar ninguna.</p>
-      <ul>
-        <li>🦉 Prudencia</li>
-        <li>⚖️ Justicia</li>
-        <li>🛡️ Fortaleza</li>
-        <li>🍃 Templanza</li>
-        <li>🤝 Solidaridad</li>
-      </ul>
-    </div>
-
-    <div class="intro-box">
-      <h3>🎯 ¿Cómo se gana?</h3>
-      <p>Al cabo de las 12 semanas, ganas si <strong>todas las virtudes están en 40 o más</strong> y el <strong>Compromiso Social está en 60 o más</strong>.</p>
-      <p>Pierdes si alguna virtud o el Compromiso Social llega a 10 o menos. <strong>¡Descuidar una sola virtud puede hundir a toda la ciudad!</strong></p>
-    </div>
-
-    <button class="btn" onclick="startGame()">⚔️ Comenzar la Odisea</button>
-
-    <div class="credits">
-      <strong>Trabajo colaborativo de Ética</strong><br>
-      Integrantes: [Nombre 1] · [Nombre 2] · [Nombre 3] · [Nombre 4]<br>
-      Códigos: [Código 1] · [Código 2] · [Código 3] · [Código 4]
-    </div>
-  </div>
-</section>
-
-<!-- =================== GAME =================== -->
-<section id="screen-game" class="screen">
-  <div class="game-wrap">
-    <div class="topbar">
-      <div class="week-badge">
-        <span>📅 Semana</span>
-        <span class="num"><span id="week-num">1</span> / 12</span>
-      </div>
-      <div class="community-meter">
-        <span class="label">Compromiso Social</span>
-        <div class="community-bar">
-          <div class="community-fill" id="community-fill"></div>
-        </div>
-        <span class="community-value" id="community-value">50</span>
-      </div>
-    </div>
-
-    <div class="virtues-panel" id="virtues-panel"></div>
-
-    <div class="event-card" id="event-card"></div>
-    <div class="actions" id="actions"></div>
-  </div>
-</section>
-
-<!-- =================== END =================== -->
-<section id="screen-end" class="screen">
-  <div class="end-wrap">
-    <div class="end-emoji" id="end-emoji">🏆</div>
-    <div class="end-title" id="end-title">¡Victoria!</div>
-    <p class="end-text" id="end-text"></p>
-    <div class="end-stats" id="end-stats"></div>
-    <button class="btn" onclick="restartGame()">🔁 Jugar de nuevo</button>
-    <div class="credits" style="margin-top:32px;">
-      <strong>Referencias:</strong> Aristóteles, <em>Ética a Nicómaco</em> · Lectura sobre las virtudes humanas del curso.
-    </div>
-  </div>
-</section>
-
-<div id="feedback"></div>
-
-<script>
 /* =========================================================
-   CONFIGURACIÓN — EDITA AQUÍ TUS DATOS
+   VIRTUDÓPOLIS — Hoja de estilos
+   Autores: Jose Miguel Bermudez (67001581)
+            Laura Sofia Flores (1109161)
    ========================================================= */
-const CONFIG = {
-  maxWeeks: 12,
-  initialVirtue: 50,
-  initialCommunity: 50,
-  winVirtueThreshold: 40,
-  winCommunityThreshold: 60,
-  loseThreshold: 10
-};
 
-/* =========================================================
-   DEFINICIÓN DE VIRTUDES
-   ========================================================= */
-const VIRTUES = {
-  prudencia:   { name: 'Prudencia',   icon: '🦉', color: 'var(--prudencia)'   },
-  justicia:    { name: 'Justicia',    icon: '⚖️', color: 'var(--justicia)'    },
-  fortaleza:   { name: 'Fortaleza',   icon: '🛡️', color: 'var(--fortaleza)'   },
-  templanza:   { name: 'Templanza',   icon: '🍃', color: 'var(--templanza)'   },
-  solidaridad: { name: 'Solidaridad', icon: '🤝', color: 'var(--solidaridad)' }
-};
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* =========================================================
-   EVENTOS DEL JUEGO — cada uno con 3 acciones
-   Cada acción: { text, effects, feedback }
-   ========================================================= */
-const EVENTS = [
-  {
-    emoji: '🌊',
-    title: 'Inundación en el Distrito del Puente',
-    description: 'Una crecida del río ha dejado a varias familias sin hogar. Los recursos son limitados y debes decidir cómo actuar.',
-    actions: [
-      { text: 'Usar todos los fondos para reconstruir las casas afectadas.',
-        effects: { solidaridad: 12, justicia: 6, prudencia: -8, comunidad: 6 },
-        feedback: 'La solidaridad inmediata salva a las familias, pero descuidas la prevención futura.' },
-      { text: 'Construir un dique para prevenir futuras inundaciones.',
-        effects: { prudencia: 12, fortaleza: 6, solidaridad: -6, comunidad: 3 },
-        feedback: 'Previenes el futuro, pero dejas solas a las víctimas actuales.' },
-      { text: 'Organizar a los vecinos para reconstruir juntos.',
-        effects: { solidaridad: 10, fortaleza: 8, templanza: 4, comunidad: 8 },
-        feedback: 'La comunidad se une. El compromiso social fortalece todas las virtudes.' }
-    ]
-  },
-  {
-    emoji: '🏥',
-    title: 'Escasez en el Hospital Central',
-    description: 'Faltan medicamentos y hay más pacientes que recursos. Debes decidir cómo distribuirlos.',
-    actions: [
-      { text: 'Dar prioridad a los casos más graves, sin importar quiénes sean.',
-        effects: { justicia: 12, prudencia: 6, solidaridad: 3, comunidad: 5 },
-        feedback: 'La justicia distributiva guía tus decisiones. Actúas con imparcialidad.' },
-      { text: 'Atender primero a quienes puedan pagar el tratamiento.',
-        effects: { justicia: -12, prudencia: 3, comunidad: -8 },
-        feedback: 'La eficiencia económica no siempre es justa. La ciudad pierde confianza.' },
-      { text: 'Repartir los medicamentos equitativamente entre todos.',
-        effects: { justicia: 8, templanza: 6, prudencia: -3, comunidad: 4 },
-        feedback: 'La equidad es valiosa, aunque puede no ser la solución más eficiente.' }
-    ]
-  },
-  {
-    emoji: '🏫',
-    title: 'La Escuela Abandonada',
-    description: 'Un edificio escolar lleva años en ruinas. Los niños del barrio no tienen dónde estudiar.',
-    actions: [
-      { text: 'Reconstruir la escuela con fondos públicos.',
-        effects: { justicia: 8, solidaridad: 6, comunidad: 10, templanza: -3 },
-        feedback: 'Inviertes en el futuro. La educación transforma comunidades.' },
-      { text: 'Convertir el edificio en un centro comercial.',
-        effects: { prudencia: -6, justicia: -8, comunidad: -4 },
-        feedback: 'El beneficio económico no compensa el abandono de los niños.' },
-      { text: 'Pedir a los vecinos que arreglen la escuela voluntariamente.',
-        effects: { solidaridad: 12, fortaleza: 6, prudencia: -4, comunidad: 6 },
-        feedback: 'El compromiso comunitario es admirable, pero no siempre suficiente.' }
-    ]
-  },
-  {
-    emoji: '👴',
-    title: 'El Anciano Abandonado',
-    description: 'Un anciano sin familia vive solo en la calle. Nadie se ha ocupado de él.',
-    actions: [
-      { text: 'Llevarlo personalmente a un refugio y visitarlo cada semana.',
-        effects: { solidaridad: 14, fortaleza: 5, comunidad: 5 },
-        feedback: 'Tu compromiso personal transforma una vida. La solidaridad se hace concreta.' },
-      { text: 'Reportarlo a servicios sociales y seguir con tus tareas.',
-        effects: { prudencia: 6, justicia: 4, solidaridad: -4 },
-        feedback: 'Cumples con tu deber, pero la frialdad deja un sabor amargo.' },
-      { text: 'Ignorarlo: no es tu responsabilidad.',
-        effects: { solidaridad: -14, justicia: -8, comunidad: -8 },
-        feedback: 'La indiferencia también es una forma de injusticia.' }
-    ]
-  },
-  {
-    emoji: '🎭',
-    title: 'Festival Cultural en la Plaza',
-    description: 'Se acerca el festival anual. Hay propuestas muy distintas sobre cómo celebrarlo.',
-    actions: [
-      { text: 'Celebrarlo con lujo y grandes espectáculos, aunque cueste mucho.',
-        effects: { templanza: -12, prudencia: -6, comunidad: 5 },
-        feedback: 'El exceso y la falta de moderación empañan la celebración.' },
-      { text: 'Hacer una celebración sencilla, participativa y austera.',
-        effects: { templanza: 12, prudencia: 6, comunidad: 6 },
-        feedback: 'La moderación y la sencillez unen a la comunidad sin excesos.' },
-      { text: 'Cancelar el festival para ahorrar.',
-        effects: { templanza: 3, prudencia: 4, comunidad: -8, solidaridad: -3 },
-        feedback: 'Ahorras, pero la comunidad pierde un espacio de encuentro.' }
-    ]
-  },
-  {
-    emoji: '📚',
-    title: 'La Biblioteca en Crisis',
-    description: 'La biblioteca municipal está a punto de cerrar por falta de presupuesto.',
-    actions: [
-      { text: 'Aumentar los impuestos para sostenerla.',
-        effects: { justicia: 5, prudencia: 8, comunidad: 5, templanza: -4 },
-        feedback: 'Inviertes en cultura, pero la carga fiscal pesa sobre algunos.' },
-      { text: 'Buscar donaciones privadas.',
-        effects: { prudencia: 6, solidaridad: 4, comunidad: 4 },
-        feedback: 'La colaboración público-privada da resultados, aunque con dependencia.' },
-      { text: 'Cerrarla y usar el espacio para oficinas.',
-        effects: { justicia: -6, prudencia: -8, comunidad: -8 },
-        feedback: 'Sacrificas el conocimiento por intereses administrativos.' }
-    ]
-  },
-  {
-    emoji: '🚗',
-    title: 'Accidente en la Avenida Principal',
-    description: 'Un conductor ebrio atropelló a una familia. La ciudad exige justicia.',
-    actions: [
-      { text: 'Aplicar la ley con todo su rigor y reparar a la familia.',
-        effects: { justicia: 14, fortaleza: 6, comunidad: 6 },
-        feedback: 'La justicia se cumple sin venganza pero sin impunidad.' },
-      { text: 'Perdonarlo porque tiene familia que depende de él.',
-        effects: { templanza: 5, justicia: -8, comunidad: -3 },
-        feedback: 'La misericordia sin justicia puede convertirse en impunidad.' },
-      { text: 'Dejar que la comunidad decida su castigo.',
-        effects: { justicia: -4, solidaridad: 3, fortaleza: -6, comunidad: 2 },
-        feedback: 'La justicia popular puede ser desordenada y arbitraria.' }
-    ]
-  },
-  {
-    emoji: '💊',
-    title: 'Brote Epidémico',
-    description: 'Una enfermedad se propaga rápidamente. Hay que tomar medidas drásticas.',
-    actions: [
-      { text: 'Cuarentena estricta y obligatoria para todos.',
-        effects: { prudencia: 10, fortaleza: 8, templanza: 4, comunidad: 4, solidaridad: -4 },
-        feedback: 'La disciplina colectiva contiene el brote, aunque sacrifica libertades.' },
-      { text: 'Campaña de concientización y confianza en la responsabilidad individual.',
-        effects: { prudencia: 4, solidaridad: 6, templanza: 6, comunidad: 3 },
-        feedback: 'Apelas a la virtud cívica. Los resultados dependen de cada uno.' },
-      { text: 'No hacer nada y esperar que pase solo.',
-        effects: { prudencia: -12, justicia: -6, comunidad: -12 },
-        feedback: 'La inacción ante una crisis tiene consecuencias graves.' }
-    ]
-  },
-  {
-    emoji: '🔥',
-    title: 'Incendio en el Mercado',
-    description: 'El mercado principal se quema. Muchos comerciantes pierden todo.',
-    actions: [
-      { text: 'Reconstruirlo con fondos comunes para todos los afectados.',
-        effects: { solidaridad: 10, justicia: 8, comunidad: 8, templanza: -3 },
-        feedback: 'La solidaridad institucional ayuda a todos por igual.' },
-      { text: 'Ayudar solo a los comerciantes más grandes para reactivar la economía.',
-        effects: { prudencia: 4, justicia: -10, solidaridad: -6, comunidad: -4 },
-        feedback: 'El criterio económico ignora a los más vulnerables.' },
-      { text: 'Organizar una colecta entre vecinos.',
-        effects: { solidaridad: 12, fortaleza: 5, comunidad: 6, prudencia: -3 },
-        feedback: 'La comunidad responde con generosidad, pero el impacto es limitado.' }
-    ]
-  },
-  {
-    emoji: '👶',
-    title: 'Orfanato al Borde del Cierre',
-    description: 'El orfanato local no puede pagar el alquiler. Los niños quedarán en la calle.',
-    actions: [
-      { text: 'Comprar el edificio con fondos públicos.',
-        effects: { justicia: 8, solidaridad: 10, comunidad: 8, prudencia: -3 },
-        feedback: 'Garantizas un hogar a los niños. La inversión social vale la pena.' },
-      { text: 'Reubicar a los niños en distintas familias.',
-        effects: { solidaridad: 5, prudencia: 6, comunidad: 3 },
-        feedback: 'La adopción es valiosa, pero no siempre hay familias disponibles.' },
-      { text: 'Dejar que el orfanato cierre por falta de recursos.',
-        effects: { solidaridad: -12, justicia: -10, comunidad: -8 },
-        feedback: 'Los más vulnerables pagan las consecuencias de la indiferencia.' }
-    ]
-  },
-  {
-    emoji: '🏭',
-    title: 'Contaminación Industrial',
-    description: 'Una fábrica contamina el río y afecta la salud de los vecinos. Genera muchos empleos.',
-    actions: [
-      { text: 'Cerrarla inmediatamente aunque se pierdan empleos.',
-        effects: { justicia: 6, fortaleza: 8, prudencia: 4, solidaridad: -4, comunidad: -3 },
-        feedback: 'Priorizas la salud sobre la economía, pero el costo social es alto.' },
-      { text: 'Exigir que invierta en tecnología limpia para seguir operando.',
-        effects: { prudencia: 10, justicia: 6, templanza: 4, comunidad: 6 },
-        feedback: 'Buscas un equilibrio entre el bien común y la actividad económica.' },
-      { text: 'Ignorar el problema porque los empleos son más importantes.',
-        effects: { justicia: -12, prudencia: -8, solidaridad: -6, comunidad: -8 },
-        feedback: 'El bienestar económico no justifica el daño a la salud pública.' }
-    ]
-  },
-  {
-    emoji: '🌾',
-    title: 'Mala Cosecha',
-    description: 'La sequía arruinó la cosecha del año. Hay escasez de alimentos en la ciudad.',
-    actions: [
-      { text: 'Racionar los alimentos entre todos por igual.',
-        effects: { templanza: 10, justicia: 8, comunidad: 6, fortaleza: -3 },
-        feedback: 'La moderación y la justicia distributiva protegen a los más débiles.' },
-      { text: 'Importar alimentos aunque endeude a la ciudad.',
-        effects: { prudencia: 4, solidaridad: 6, comunidad: 5, templanza: -4 },
-        feedback: 'Solucionas el presente, pero hipotecas el futuro.' },
-      { text: 'Dejar que el mercado regule los precios.',
-        effects: { justicia: -10, solidaridad: -8, comunidad: -6 },
-        feedback: 'Los más pobres no pueden pagar y el hambre se extiende.' }
-    ]
-  },
-  {
-    emoji: '🏠',
-    title: 'Desalojo en el Barrio Antiguo',
-    description: 'Una inmobiliaria quiere demoler casas históricas para construir lujosos edificios.',
-    actions: [
-      { text: 'Proteger las casas y a sus habitantes.',
-        effects: { justicia: 10, solidaridad: 8, fortaleza: 6, prudencia: -3, comunidad: 6 },
-        feedback: 'Defiendes la identidad y los derechos de la comunidad.' },
-      { text: 'Permitir la demolición a cambio de nuevos empleos.',
-        effects: { prudencia: -4, justicia: -8, solidaridad: -6, comunidad: -6 },
-        feedback: 'El progreso a costa del desarraigo deja heridas profundas.' },
-      { text: 'Negociar: conservar algunas casas y permitir otras construcciones.',
-        effects: { prudencia: 10, justicia: 5, templanza: 6, comunidad: 3 },
-        feedback: 'La búsqueda del equilibrio es una manifestación de prudencia.' }
-    ]
-  },
-  {
-    emoji: '⚽',
-    title: 'Torneo Deportivo Comunitario',
-    description: 'Se propone organizar un torneo para unir a los barrios. Hay debate sobre el formato.',
-    actions: [
-      { text: 'Torneo abierto y gratuito para todos los barrios.',
-        effects: { solidaridad: 10, comunidad: 8, templanza: 3 },
-        feedback: 'El deporte une a la comunidad y refuerza lazos sociales.' },
-      { text: 'Torneo con cuota de inscripción para costearlo.',
-        effects: { prudencia: 6, solidaridad: -6, comunidad: 2 },
-        feedback: 'La sostenibilidad económica excluye a los más pobres.' },
-      { text: 'Competencia de élite con premios para los mejores.',
-        effects: { fortaleza: 6, templanza: -6, solidaridad: -4, comunidad: 1 },
-        feedback: 'El afán de victoria puede opacar el espíritu comunitario.' }
-    ]
-  },
-  {
-    emoji: '🗳️',
-    title: 'Elecciones en Virtudópolis',
-    description: 'Se acercan las elecciones. Un candidato promete soluciones fáciles pero dudosas.',
-    actions: [
-      { text: 'Apoyar al candidato con el mejor programa aunque sea impopular.',
-        effects: { prudencia: 12, fortaleza: 8, justicia: 5, comunidad: 3 },
-        feedback: 'La prudencia te lleva a elegir el bien a largo plazo.' },
-      { text: 'Apoyar al que promete regalos inmediatos.',
-        effects: { prudencia: -10, justicia: -4, comunidad: -3 },
-        feedback: 'Las soluciones fáciles suelen traer problemas difíciles.' },
-      { text: 'Llamar a la abstención como protesta.',
-        effects: { justicia: -4, solidaridad: -6, comunidad: -5, prudencia: -3 },
-        feedback: 'La indiferencia cívica también es una forma de renunciar al bien común.' }
-    ]
-  }
-];
-
-/* =========================================================
-   ESTADO DEL JUEGO
-   ========================================================= */
-let state = {
-  virtues: {},
-  community: CONFIG.initialCommunity,
-  week: 1,
-  usedEvents: [],
-  decisions: []
-};
-
-/* =========================================================
-   FUNCIONES PRINCIPALES
-   ========================================================= */
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+:root {
+  --prudencia: #4a9eff;
+  --justicia: #ffd93d;
+  --fortaleza: #ff4757;
+  --templanza: #2ed573;
+  --solidaridad: #a55eea;
+  --comunidad: #ff9f43;
+  --bg-dark: #0a0e27;
+  --bg-mid: #1a1f4e;
+  --text: #e8eaf6;
+  --text-dim: #a0a8c9;
+  --glass: rgba(25, 30, 60, 0.75);
+  --border: rgba(120, 140, 220, 0.25);
 }
 
-function startGame() {
-  // Reiniciar virtudes
-  state.virtues = {};
-  Object.keys(VIRTUES).forEach(k => state.virtues[k] = CONFIG.initialVirtue);
-  state.community = CONFIG.initialCommunity;
-  state.week = 1;
-  state.usedEvents = [];
-  state.decisions = [];
-
-  renderVirtues();
-  renderCommunity();
-  document.getElementById('week-num').textContent = state.week;
-  showScreen('screen-game');
-  setTimeout(nextEvent, 300);
+html, body {
+  min-height: 100vh;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: var(--text);
+  background: radial-gradient(ellipse at top, #1a1f4e 0%, #0a0e27 55%, #04070f 100%);
+  overflow-x: hidden;
+  line-height: 1.5;
 }
 
-function restartGame() {
-  showScreen('screen-landing');
+/* Fondo animado con partículas */
+#stars {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 70% 60%, rgba(160,200,255,0.5), transparent),
+    radial-gradient(2px 2px at 40% 80%, rgba(255,220,150,0.5), transparent),
+    radial-gradient(1px 1px at 85% 20%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1.5px 1.5px at 10% 70%, rgba(200,180,255,0.5), transparent),
+    radial-gradient(1px 1px at 55% 15%, rgba(255,255,255,0.5), transparent);
+  background-size: 200% 200%;
+  animation: drift 60s linear infinite;
+}
+@keyframes drift {
+  from { background-position: 0% 0%; }
+  to   { background-position: 100% 100%; }
 }
 
-function renderVirtues() {
-  const panel = document.getElementById('virtues-panel');
-  panel.innerHTML = '';
-  Object.entries(VIRTUES).forEach(([key, v]) => {
-    const val = state.virtues[key];
-    const pct = Math.max(0, Math.min(100, val));
-    panel.innerHTML += `
-      <div class="virtue" style="--vc: ${v.color};" id="virtue-${key}">
-        <div class="vhead">
-          <span class="vname">${v.name}</span>
-          <span class="vicon">${v.icon}</span>
-        </div>
-        <div class="vbar"><div class="vfill" style="width: ${pct}%;"></div></div>
-        <div class="vvalue">${val}</div>
-      </div>
-    `;
-  });
+/* Pantallas */
+.screen {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: none;
+  padding: 24px 20px 40px;
+  animation: fadeIn 0.6s ease;
+}
+.screen.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-function renderCommunity() {
-  const val = Math.max(0, Math.min(100, state.community));
-  document.getElementById('community-fill').style.width = val + '%';
-  document.getElementById('community-value').textContent = state.community;
+/* ------------ LANDING ------------ */
+.landing-wrap {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  text-align: center;
+}
+.logo-badge {
+  display: inline-block;
+  padding: 6px 16px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+h1.title {
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  background: linear-gradient(135deg, #4a9eff 0%, #a55eea 40%, #ffd93d 75%, #ff4757 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 900;
+  letter-spacing: -1px;
+  margin-bottom: 8px;
+  line-height: 1.1;
+}
+.subtitle {
+  color: var(--text-dim);
+  font-size: 1.05rem;
+  margin-bottom: 36px;
+  font-style: italic;
 }
 
-function updateVirtue(key, delta) {
-  const before = state.virtues[key];
-  state.virtues[key] = Math.max(0, Math.min(100, before + delta));
-  const el = document.getElementById('virtue-' + key);
-  if (!el) return;
-  el.querySelector('.vfill').style.width = state.virtues[key] + '%';
-  el.querySelector('.vvalue').textContent = state.virtues[key];
-
-  if (delta !== 0) {
-    const rect = el.getBoundingClientRect();
-    showFloatEffect(rect.left + rect.width / 2, rect.top, (delta > 0 ? '+' : '') + delta, delta > 0);
-  }
+.intro-box {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 28px;
+  text-align: left;
+  margin-bottom: 28px;
+  backdrop-filter: blur(10px);
+}
+.intro-box h3 {
+  color: #ffd93d;
+  margin-bottom: 12px;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+}
+.intro-box p {
+  color: var(--text-dim);
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+}
+.intro-box ul {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  margin-top: 16px;
+}
+.intro-box ul li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: rgba(74, 158, 255, 0.08);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.88rem;
 }
 
-function updateCommunity(delta) {
-  state.community = Math.max(0, Math.min(100, state.community + delta));
-  renderCommunity();
-  if (delta !== 0) {
-    const el = document.getElementById('community-value');
-    const rect = el.getBoundingClientRect();
-    showFloatEffect(rect.left + rect.width / 2, rect.top, (delta > 0 ? '+' : '') + delta, delta > 0);
-  }
+.btn {
+  display: inline-block;
+  padding: 16px 40px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
+  background: linear-gradient(135deg, #4a9eff, #a55eea);
+  color: white;
+  box-shadow: 0 8px 30px rgba(74, 158, 255, 0.35);
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(165, 94, 234, 0.5);
+}
+.btn:active { transform: translateY(0); }
+
+.credits {
+  margin-top: 32px;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+}
+.credits strong { color: var(--text); }
+
+/* ------------ GAME SCREEN ------------ */
+.game-wrap {
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
-function showFloatEffect(x, y, text, good) {
-  const el = document.createElement('div');
-  el.className = 'float-effect';
-  el.textContent = text;
-  el.style.left = x + 'px';
-  el.style.top = y + 'px';
-  el.style.color = good ? '#2ed573' : '#ff4757';
-  document.body.appendChild(el);
-  setTimeout(() => el.remove(), 1500);
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px 20px;
+  margin-bottom: 18px;
+  backdrop-filter: blur(10px);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.week-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+}
+.week-badge .num {
+  background: linear-gradient(135deg, #4a9eff, #a55eea);
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-weight: 900;
+  font-size: 1rem;
 }
 
-function showFeedback(msg, type) {
-  const fb = document.getElementById('feedback');
-  fb.textContent = msg;
-  fb.className = 'show ' + (type || '');
-  clearTimeout(fb._timer);
-  fb._timer = setTimeout(() => fb.className = '', 3200);
+.community-meter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 240px;
+}
+.community-meter .label {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.community-bar {
+  flex: 1;
+  height: 12px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+.community-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff4757, #ff9f43, #2ed573);
+  width: 50%;
+  border-radius: 999px;
+  transition: width 0.7s cubic-bezier(.4,0,.2,1);
+}
+.community-value {
+  font-weight: 900;
+  color: #ff9f43;
+  font-size: 1.05rem;
+  min-width: 40px;
+  text-align: right;
 }
 
-function nextEvent() {
-  if (state.usedEvents.length >= CONFIG.maxWeeks || state.usedEvents.length >= EVENTS.length) {
-    return endGame();
-  }
-
-  let available = EVENTS.filter(e => !state.usedEvents.includes(e));
-  if (available.length === 0) return endGame();
-
-  const ev = available[Math.floor(Math.random() * available.length)];
-  state.usedEvents.push(ev);
-  document.getElementById('week-num').textContent = state.week;
-
-  renderEvent(ev);
+/* Panel de virtudes */
+.virtues-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.virtue {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 14px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.virtue::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--vc);
+  opacity: 0.9;
+}
+.virtue:hover { transform: translateY(-2px); }
+.virtue .vhead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.virtue .vname {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--vc);
+}
+.virtue .vicon { font-size: 1.1rem; }
+.virtue .vbar {
+  height: 8px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+.virtue .vfill {
+  height: 100%;
+  background: var(--vc);
+  border-radius: 999px;
+  transition: width 0.7s cubic-bezier(.4,0,.2,1);
+  box-shadow: 0 0 12px var(--vc);
+}
+.virtue .vvalue {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  text-align: right;
+  font-weight: 700;
 }
 
-function renderEvent(ev) {
-  const card = document.getElementById('event-card');
-  card.innerHTML = `
-    <div class="event-emoji">${ev.emoji}</div>
-    <div class="event-title">${ev.title}</div>
-    <div class="event-desc">${ev.description}</div>
-  `;
-  card.style.animation = 'none';
-  void card.offsetWidth;
-  card.style.animation = 'cardIn 0.5s ease';
-
-  const actions = document.getElementById('actions');
-  actions.innerHTML = '';
-  ev.actions.forEach((a, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'action-btn';
-    btn.innerHTML = `<span class="action-num">${i + 1}</span><span>${a.text}</span>`;
-    btn.onclick = () => applyAction(a, ev);
-    actions.appendChild(btn);
-  });
+/* Carta de evento */
+.event-card {
+  background: linear-gradient(160deg, rgba(30,36,72,0.95), rgba(15,20,45,0.95));
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px 28px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+  animation: cardIn 0.5s ease;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.event-card::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle at 30% 20%, rgba(74,158,255,0.15), transparent 50%);
+  pointer-events: none;
+}
+.event-emoji {
+  font-size: 3.2rem;
+  text-align: center;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 0 20px rgba(255,215,100,0.4));
+  animation: pulse 2.5s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { transform: scale(1); }
+  50%     { transform: scale(1.08); }
+}
+.event-title {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+.event-desc {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 1rem;
+  max-width: 640px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
-function applyAction(action, ev) {
-  // Deshabilitar botones para evitar doble click
-  document.querySelectorAll('.action-btn').forEach(b => b.disabled = true);
-
-  state.decisions.push({
-    week: state.week,
-    event: ev.title,
-    action: action.text
-  });
-
-  // Aplicar efectos
-  Object.entries(action.effects).forEach(([k, v]) => {
-    if (k === 'comunidad') {
-      updateCommunity(v);
-    } else if (state.virtues[k] !== undefined) {
-      updateVirtue(k, v);
-    }
-  });
-
-  // Feedback
-  const isGood = Object.values(action.effects).reduce((s, v) => s + v, 0) >= 0;
-  showFeedback(action.feedback, isGood ? 'good' : 'bad');
-
-  // Avanzar semana
-  setTimeout(() => {
-    state.week++;
-    document.getElementById('week-num').textContent = state.week;
-
-    // Comprobar derrota
-    if (checkDefeat()) return;
-
-    // Comprobar victoria total
-    if (state.week > CONFIG.maxWeeks) return endGame();
-
-    nextEvent();
-  }, 1800);
+/* Acciones */
+.actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+.action-btn {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+  text-align: left;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  line-height: 1.45;
+}
+.action-btn:hover {
+  background: rgba(74,158,255,0.15);
+  border-color: rgba(74,158,255,0.5);
+  transform: translateX(4px);
+  box-shadow: 0 8px 24px rgba(74,158,255,0.2);
+}
+.action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+.action-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px; height: 30px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #4a9eff, #a55eea);
+  font-weight: 900;
+  font-size: 0.9rem;
+  flex-shrink: 0;
 }
 
-function checkDefeat() {
-  for (const k of Object.keys(VIRTUES)) {
-    if (state.virtues[k] <= CONFIG.loseThreshold) {
-      return endGame('defeat', `La virtud de la ${VIRTUES[k].name} ha caído demasiado bajo. Sin ella, Virtudópolis no puede prosperar.`);
-    }
-  }
-  if (state.community <= CONFIG.loseThreshold) {
-    return endGame('defeat', 'El Compromiso Social se ha derrumbado. La comunidad se ha desintegrado.');
-  }
-  return false;
+/* Toast de feedback */
+#feedback {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100px);
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 24px;
+  max-width: 460px;
+  color: var(--text);
+  font-size: 0.92rem;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  opacity: 0;
+  z-index: 100;
+  text-align: center;
+}
+#feedback.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+#feedback.good { border-color: #2ed573; box-shadow: 0 12px 40px rgba(46,213,115,0.3); }
+#feedback.bad  { border-color: #ff4757; box-shadow: 0 12px 40px rgba(255,71,87,0.3); }
+
+/* Efectos flotantes */
+.float-effect {
+  position: fixed;
+  font-weight: 900;
+  font-size: 1.2rem;
+  pointer-events: none;
+  z-index: 200;
+  animation: floatUp 1.4s ease forwards;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+}
+@keyframes floatUp {
+  0%   { opacity: 0; transform: translateY(0) scale(0.8); }
+  20%  { opacity: 1; transform: translateY(-10px) scale(1.1); }
+  100% { opacity: 0; transform: translateY(-70px) scale(1); }
 }
 
-function endGame(forced, reason) {
-  showScreen('screen-end');
-
-  const emojiEl = document.getElementById('end-emoji');
-  const titleEl = document.getElementById('end-title');
-  const textEl = document.getElementById('end-text');
-  const statsEl = document.getElementById('end-stats');
-
-  let isWin = false;
-  let message = '';
-
-  if (forced === 'defeat') {
-    isWin = false;
-    message = reason;
-  } else {
-    // Victoria si todas las virtudes >= umbral y comunidad >= umbral
-    const allOk = Object.values(state.virtues).every(v => v >= CONFIG.winVirtueThreshold);
-    const comOk = state.community >= CONFIG.winCommunityThreshold;
-    isWin = allOk && comOk;
-
-    if (isWin) {
-      message = 'Has guiado a Virtudópolis hacia el buen obrar. Las virtudes florecen y la comunidad prospera. Aristóteles estaría orgulloso: has practicado, no solo conocido, las virtudes.';
-    } else if (!comOk) {
-      message = 'Algunas virtudes se mantuvieron, pero el Compromiso Social no fue suficiente. La ciudad necesita más unión y solidaridad.';
-    } else {
-      message = 'La comunidad prosperó, pero algunas virtudes quedaron descuidadas. Un buen gobernante debe cultivar todas las virtudes, no solo algunas.';
-    }
-  }
-
-  emojiEl.textContent = isWin ? '🏆' : '💔';
-  titleEl.textContent = isWin ? '¡Victoria Virtuosa!' : (forced === 'defeat' ? 'Derrota...' : 'Victoria Incompleta');
-  titleEl.className = 'end-title ' + (isWin ? 'win' : 'lose');
-  textEl.textContent = message;
-
-  // Stats
-  let statsHtml = '';
-  Object.entries(VIRTUES).forEach(([k, v]) => {
-    const val = state.virtues[k];
-    const ok = val >= CONFIG.winVirtueThreshold;
-    statsHtml += `
-      <div class="end-stat">
-        <div class="k">${v.icon} ${v.name}</div>
-        <div class="v" style="color: ${ok ? '#2ed573' : '#ff4757'};">${val}</div>
-      </div>
-    `;
-  });
-  statsHtml += `
-    <div class="end-stat">
-      <div class="k">🤝 Compromiso Social</div>
-      <div class="v" style="color: ${state.community >= CONFIG.winCommunityThreshold ? '#2ed573' : '#ff4757'};">${state.community}</div>
-    </div>
-  `;
-  statsEl.innerHTML = statsHtml;
+/* ------------ END SCREEN ------------ */
+.end-wrap {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 40px 20px;
+}
+.end-emoji {
+  font-size: 5rem;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 0 30px rgba(255,215,100,0.5));
+  animation: pulse 2s ease-in-out infinite;
+}
+.end-title {
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+}
+.end-title.win  { color: #2ed573; text-shadow: 0 0 30px rgba(46,213,115,0.5); }
+.end-title.lose { color: #ff4757; text-shadow: 0 0 30px rgba(255,71,87,0.5); }
+.end-text {
+  color: var(--text-dim);
+  font-size: 1rem;
+  margin-bottom: 28px;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.end-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.end-stat {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 10px;
+  backdrop-filter: blur(10px);
+}
+.end-stat .k {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+.end-stat .v {
+  font-size: 1.5rem;
+  font-weight: 900;
 }
 
-/* =========================================================
-   INICIALIZACIÓN
-   ========================================================= */
-document.addEventListener('DOMContentLoaded', () => {
-  // Atajo de teclado 1/2/3 para elegir acción
-  document.addEventListener('keydown', (e) => {
-    if (!document.getElementById('screen-game').classList.contains('active')) return;
-    const idx = parseInt(e.key) - 1;
-    const btns = document.querySelectorAll('.action-btn:not([disabled])');
-    if (btns[idx]) btns[idx].click();
-  });
-});
-</script>
-</body>
-</html>
+/* Responsive */
+@media (max-width: 600px) {
+  .event-card { padding: 24px 20px; }
+  .event-title { font-size: 1.15rem; }
+  .event-emoji { font-size: 2.5rem; }
+  .btn { padding: 14px 28px; font-size: 0.95rem; }
+  .intro-box { padding: 20px; }
+}
