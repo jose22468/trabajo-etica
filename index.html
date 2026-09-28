@@ -1,507 +1,91 @@
-/* =========================================================
-   VIRTUDÓPOLIS — Hoja de estilos
-   Autores: Jose Miguel Bermudez (67001581)
-            Laura Sofia Flores (1109161)
-   ========================================================= */
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virtudópolis: La Odisea del Buen Obrar</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="stars"></div>
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+  <!-- =================== LANDING =================== -->
+  <section id="screen-landing" class="screen active">
+    <div class="landing-wrap">
+      <div class="logo-badge">Ética · Aristóteles · Virtudes Humanas</div>
+      <h1 class="title">Virtudópolis</h1>
+      <p class="subtitle">La Odisea del Buen Obrar</p>
 
-:root {
-  --prudencia: #4a9eff;
-  --justicia: #ffd93d;
-  --fortaleza: #ff4757;
-  --templanza: #2ed573;
-  --solidaridad: #a55eea;
-  --comunidad: #ff9f43;
-  --bg-dark: #0a0e27;
-  --bg-mid: #1a1f4e;
-  --text: #e8eaf6;
-  --text-dim: #a0a8c9;
-  --glass: rgba(25, 30, 60, 0.75);
-  --border: rgba(120, 140, 220, 0.25);
-}
+      <div class="intro-box">
+        <h3>🏛️ La ciudad te necesita</h3>
+        <p>Eres uno de los <strong>Guardianes de la Virtud</strong> de Virtudópolis, una ciudad que ha olvidado el buen obrar. Durante <strong>12 semanas</strong> enfrentarás eventos comunitarios y deberás tomar decisiones que afectarán a las <strong>5 virtudes aristotélicas</strong> y al <strong>Compromiso Social</strong>.</p>
+        <p>No basta con saber qué es una virtud: <em>hay que practicarla</em> (Aristóteles, <em>Ética a Nicómaco</em>). Cada acción tiene consecuencias y debes equilibrar las virtudes para no descuidar ninguna.</p>
+        <ul>
+          <li>🦉 Prudencia</li>
+          <li>⚖️ Justicia</li>
+          <li>🛡️ Fortaleza</li>
+          <li>🍃 Templanza</li>
+          <li>🤝 Solidaridad</li>
+        </ul>
+      </div>
 
-html, body {
-  min-height: 100vh;
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  color: var(--text);
-  background: radial-gradient(ellipse at top, #1a1f4e 0%, #0a0e27 55%, #04070f 100%);
-  overflow-x: hidden;
-  line-height: 1.5;
-}
+      <div class="intro-box">
+        <h3>🎯 ¿Cómo se gana?</h3>
+        <p>Al cabo de las 12 semanas, ganas si <strong>todas las virtudes están en 40 o más</strong> y el <strong>Compromiso Social está en 60 o más</strong>.</p>
+        <p>Pierdes si alguna virtud o el Compromiso Social llega a 10 o menos. <strong>¡Descuidar una sola virtud puede hundir a toda la ciudad!</strong></p>
+      </div>
 
-/* Fondo animado con partículas */
-#stars {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background-image:
-    radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.6), transparent),
-    radial-gradient(1px 1px at 70% 60%, rgba(160,200,255,0.5), transparent),
-    radial-gradient(2px 2px at 40% 80%, rgba(255,220,150,0.5), transparent),
-    radial-gradient(1px 1px at 85% 20%, rgba(255,255,255,0.4), transparent),
-    radial-gradient(1.5px 1.5px at 10% 70%, rgba(200,180,255,0.5), transparent),
-    radial-gradient(1px 1px at 55% 15%, rgba(255,255,255,0.5), transparent);
-  background-size: 200% 200%;
-  animation: drift 60s linear infinite;
-}
-@keyframes drift {
-  from { background-position: 0% 0%; }
-  to   { background-position: 100% 100%; }
-}
+      <button class="btn" id="btn-start">⚔️ Comenzar la Odisea</button>
 
-/* Pantallas */
-.screen {
-  position: relative;
-  z-index: 1;
-  min-height: 100vh;
-  display: none;
-  padding: 24px 20px 40px;
-  animation: fadeIn 0.6s ease;
-}
-.screen.active { display: block; }
+      <div class="credits">
+        <strong>Trabajo colaborativo de Ética</strong><br>
+        Integrantes: Jose Miguel Bermudez · Laura Sofia Flores<br>
+        Códigos: 67001581 · 1109161
+      </div>
+    </div>
+  </section>
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+  <!-- =================== GAME =================== -->
+  <section id="screen-game" class="screen">
+    <div class="game-wrap">
+      <div class="topbar">
+        <div class="week-badge">
+          <span>📅 Semana</span>
+          <span class="num"><span id="week-num">1</span> / 12</span>
+        </div>
+        <div class="community-meter">
+          <span class="label">Compromiso Social</span>
+          <div class="community-bar">
+            <div class="community-fill" id="community-fill"></div>
+          </div>
+          <span class="community-value" id="community-value">50</span>
+        </div>
+      </div>
 
-/* ------------ LANDING ------------ */
-.landing-wrap {
-  max-width: 780px;
-  margin: 0 auto;
-  padding: 40px 24px;
-  text-align: center;
-}
-.logo-badge {
-  display: inline-block;
-  padding: 6px 16px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  font-size: 0.78rem;
-  letter-spacing: 2px;
-  color: var(--text-dim);
-  text-transform: uppercase;
-  margin-bottom: 24px;
-}
-h1.title {
-  font-size: clamp(2rem, 5vw, 3.4rem);
-  background: linear-gradient(135deg, #4a9eff 0%, #a55eea 40%, #ffd93d 75%, #ff4757 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 900;
-  letter-spacing: -1px;
-  margin-bottom: 8px;
-  line-height: 1.1;
-}
-.subtitle {
-  color: var(--text-dim);
-  font-size: 1.05rem;
-  margin-bottom: 36px;
-  font-style: italic;
-}
+      <div class="virtues-panel" id="virtues-panel"></div>
 
-.intro-box {
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 28px;
-  text-align: left;
-  margin-bottom: 28px;
-  backdrop-filter: blur(10px);
-}
-.intro-box h3 {
-  color: #ffd93d;
-  margin-bottom: 12px;
-  font-size: 1.1rem;
-  letter-spacing: 1px;
-}
-.intro-box p {
-  color: var(--text-dim);
-  margin-bottom: 12px;
-  font-size: 0.95rem;
-}
-.intro-box ul {
-  list-style: none;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 10px;
-  margin-top: 16px;
-}
-.intro-box ul li {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 12px;
-  background: rgba(74, 158, 255, 0.08);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  font-size: 0.88rem;
-}
+      <div class="event-card" id="event-card"></div>
+      <div class="actions" id="actions"></div>
+    </div>
+  </section>
 
-.btn {
-  display: inline-block;
-  padding: 16px 40px;
-  border: none;
-  border-radius: 12px;
-  font-size: 1.05rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  font-family: inherit;
-  background: linear-gradient(135deg, #4a9eff, #a55eea);
-  color: white;
-  box-shadow: 0 8px 30px rgba(74, 158, 255, 0.35);
-}
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(165, 94, 234, 0.5);
-}
-.btn:active { transform: translateY(0); }
+  <!-- =================== END =================== -->
+  <section id="screen-end" class="screen">
+    <div class="end-wrap">
+      <div class="end-emoji" id="end-emoji">🏆</div>
+      <div class="end-title" id="end-title">¡Victoria!</div>
+      <p class="end-text" id="end-text"></p>
+      <div class="end-stats" id="end-stats"></div>
+      <button class="btn" id="btn-restart">🔁 Jugar de nuevo</button>
+      <div class="credits" style="margin-top:32px;">
+        <strong>Referencias:</strong> Aristóteles, <em>Ética a Nicómaco</em> · Lectura sobre las virtudes humanas del curso.<br>
+        <strong>Autores:</strong> Jose Miguel Bermudez (67001581) · Laura Sofia Flores (1109161)
+      </div>
+    </div>
+  </section>
 
-.credits {
-  margin-top: 32px;
-  font-size: 0.8rem;
-  color: var(--text-dim);
-  border-top: 1px solid var(--border);
-  padding-top: 20px;
-}
-.credits strong { color: var(--text); }
+  <div id="feedback"></div>
 
-/* ------------ GAME SCREEN ------------ */
-.game-wrap {
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 14px 20px;
-  margin-bottom: 18px;
-  backdrop-filter: blur(10px);
-  flex-wrap: wrap;
-  gap: 12px;
-}
-.week-badge {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.95rem;
-}
-.week-badge .num {
-  background: linear-gradient(135deg, #4a9eff, #a55eea);
-  padding: 4px 12px;
-  border-radius: 8px;
-  font-weight: 900;
-  font-size: 1rem;
-}
-
-.community-meter {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex: 1;
-  min-width: 240px;
-}
-.community-meter .label {
-  font-size: 0.82rem;
-  color: var(--text-dim);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-.community-bar {
-  flex: 1;
-  height: 12px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 999px;
-  overflow: hidden;
-  position: relative;
-}
-.community-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #ff4757, #ff9f43, #2ed573);
-  width: 50%;
-  border-radius: 999px;
-  transition: width 0.7s cubic-bezier(.4,0,.2,1);
-}
-.community-value {
-  font-weight: 900;
-  color: #ff9f43;
-  font-size: 1.05rem;
-  min-width: 40px;
-  text-align: right;
-}
-
-/* Panel de virtudes */
-.virtues-panel {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-  gap: 12px;
-  margin-bottom: 18px;
-}
-.virtue {
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 12px 14px;
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-.virtue::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: var(--vc);
-  opacity: 0.9;
-}
-.virtue:hover { transform: translateY(-2px); }
-.virtue .vhead {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-}
-.virtue .vname {
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  color: var(--vc);
-}
-.virtue .vicon { font-size: 1.1rem; }
-.virtue .vbar {
-  height: 8px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 999px;
-  overflow: hidden;
-  margin-bottom: 6px;
-}
-.virtue .vfill {
-  height: 100%;
-  background: var(--vc);
-  border-radius: 999px;
-  transition: width 0.7s cubic-bezier(.4,0,.2,1);
-  box-shadow: 0 0 12px var(--vc);
-}
-.virtue .vvalue {
-  font-size: 0.78rem;
-  color: var(--text-dim);
-  text-align: right;
-  font-weight: 700;
-}
-
-/* Carta de evento */
-.event-card {
-  background: linear-gradient(160deg, rgba(30,36,72,0.95), rgba(15,20,45,0.95));
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 32px 28px;
-  margin-bottom: 20px;
-  backdrop-filter: blur(10px);
-  position: relative;
-  overflow: hidden;
-  animation: cardIn 0.5s ease;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
-}
-@keyframes cardIn {
-  from { opacity: 0; transform: translateY(20px) scale(0.98); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
-}
-.event-card::before {
-  content: '';
-  position: absolute;
-  top: -50%; left: -50%;
-  width: 200%; height: 200%;
-  background: radial-gradient(circle at 30% 20%, rgba(74,158,255,0.15), transparent 50%);
-  pointer-events: none;
-}
-.event-emoji {
-  font-size: 3.2rem;
-  text-align: center;
-  margin-bottom: 12px;
-  filter: drop-shadow(0 0 20px rgba(255,215,100,0.4));
-  animation: pulse 2.5s ease-in-out infinite;
-}
-@keyframes pulse {
-  0%,100% { transform: scale(1); }
-  50%     { transform: scale(1.08); }
-}
-.event-title {
-  text-align: center;
-  font-size: 1.4rem;
-  font-weight: 800;
-  margin-bottom: 12px;
-  color: #fff;
-  letter-spacing: 0.5px;
-}
-.event-desc {
-  text-align: center;
-  color: var(--text-dim);
-  font-size: 1rem;
-  max-width: 640px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
-}
-
-/* Acciones */
-.actions {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-}
-.action-btn {
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 18px 20px;
-  text-align: left;
-  color: var(--text);
-  font-family: inherit;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  backdrop-filter: blur(10px);
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  line-height: 1.45;
-}
-.action-btn:hover {
-  background: rgba(74,158,255,0.15);
-  border-color: rgba(74,158,255,0.5);
-  transform: translateX(4px);
-  box-shadow: 0 8px 24px rgba(74,158,255,0.2);
-}
-.action-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-}
-.action-num {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 30px; height: 30px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #4a9eff, #a55eea);
-  font-weight: 900;
-  font-size: 0.9rem;
-  flex-shrink: 0;
-}
-
-/* Toast de feedback */
-#feedback {
-  position: fixed;
-  top: 24px;
-  left: 50%;
-  transform: translateX(-50%) translateY(-100px);
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 16px 24px;
-  max-width: 460px;
-  color: var(--text);
-  font-size: 0.92rem;
-  backdrop-filter: blur(15px);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-  transition: transform 0.4s ease, opacity 0.4s ease;
-  opacity: 0;
-  z-index: 100;
-  text-align: center;
-}
-#feedback.show {
-  transform: translateX(-50%) translateY(0);
-  opacity: 1;
-}
-#feedback.good { border-color: #2ed573; box-shadow: 0 12px 40px rgba(46,213,115,0.3); }
-#feedback.bad  { border-color: #ff4757; box-shadow: 0 12px 40px rgba(255,71,87,0.3); }
-
-/* Efectos flotantes */
-.float-effect {
-  position: fixed;
-  font-weight: 900;
-  font-size: 1.2rem;
-  pointer-events: none;
-  z-index: 200;
-  animation: floatUp 1.4s ease forwards;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.8);
-}
-@keyframes floatUp {
-  0%   { opacity: 0; transform: translateY(0) scale(0.8); }
-  20%  { opacity: 1; transform: translateY(-10px) scale(1.1); }
-  100% { opacity: 0; transform: translateY(-70px) scale(1); }
-}
-
-/* ------------ END SCREEN ------------ */
-.end-wrap {
-  max-width: 700px;
-  margin: 0 auto;
-  text-align: center;
-  padding: 40px 20px;
-}
-.end-emoji {
-  font-size: 5rem;
-  margin-bottom: 16px;
-  filter: drop-shadow(0 0 30px rgba(255,215,100,0.5));
-  animation: pulse 2s ease-in-out infinite;
-}
-.end-title {
-  font-size: 2rem;
-  font-weight: 900;
-  margin-bottom: 12px;
-  letter-spacing: 1px;
-}
-.end-title.win  { color: #2ed573; text-shadow: 0 0 30px rgba(46,213,115,0.5); }
-.end-title.lose { color: #ff4757; text-shadow: 0 0 30px rgba(255,71,87,0.5); }
-.end-text {
-  color: var(--text-dim);
-  font-size: 1rem;
-  margin-bottom: 28px;
-  max-width: 520px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.end-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 12px;
-  margin-bottom: 28px;
-}
-.end-stat {
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px 10px;
-  backdrop-filter: blur(10px);
-}
-.end-stat .k {
-  font-size: 0.75rem;
-  color: var(--text-dim);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 6px;
-}
-.end-stat .v {
-  font-size: 1.5rem;
-  font-weight: 900;
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-  .event-card { padding: 24px 20px; }
-  .event-title { font-size: 1.15rem; }
-  .event-emoji { font-size: 2.5rem; }
-  .btn { padding: 14px 28px; font-size: 0.95rem; }
-  .intro-box { padding: 20px; }
-}
+  <script src="js/script.js"></script>
+</body>
+</html>
