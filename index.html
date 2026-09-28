@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Juego educativo sobre virtudes humanas y compromiso social." />
+    <title>Ruta de las Virtudes</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell" aria-labelledby="game-title">
+      <header class="site-header">
+        <p class="eyebrow">Aprende jugando</p>
+        <h1 id="game-title">Ruta de las Virtudes</h1>
+        <p class="subtitle">Decide cómo obrar bien en situaciones cotidianas y comunitarias.</p>
+      </header>
+
+      <section id="start-screen" class="card screen" aria-labelledby="start-heading">
+        <div class="virtue-icon" aria-hidden="true">✦</div>
+        <h2 id="start-heading">Tu misión</h2>
+        <p>Recorre diez desafíos. Elige la acción más virtuosa y descubre cómo los buenos hábitos ayudan a construir una comunidad mejor.</p>
+        <ul class="instructions">
+          <li>Lee cada situación con atención.</li>
+          <li>Selecciona una de las cuatro opciones.</li>
+          <li>Consulta la explicación y continúa tu ruta.</li>
+        </ul>
+        <button id="start-button" class="button button-primary" type="button">Comenzar el juego</button>
+      </section>
+
+      <section id="quiz-screen" class="card screen" hidden aria-labelledby="question-heading">
+        <div class="game-status" aria-label="Estado del juego">
+          <p id="progress-text" class="progress-text">Nivel 1 de 10</p>
+          <p class="score">Puntaje: <strong id="score">0</strong><span aria-hidden="true"> / </span><span class="sr-only"> de </span><span id="total-score">10</span></p>
+        </div>
+        <div class="progress-track" aria-hidden="true"><div id="progress-bar" class="progress-bar"></div></div>
+        <div class="journey" aria-label="Ruta de progreso del personaje">
+          <div class="journey-path" aria-hidden="true"></div>
+          <span id="avatar" class="avatar" aria-hidden="true">🧑🏽‍🚀</span>
+          <span class="journey-start" aria-hidden="true">🏠</span>
+          <span class="journey-goal" aria-hidden="true">🏆</span>
+        </div>
+        <p id="avatar-message" class="avatar-message" aria-live="polite"></p>
+        <p id="virtue-tag" class="virtue-tag">Prudencia</p>
+        <h2 id="question-heading" tabindex="-1"></h2>
+        <div id="answers" class="answers" role="group" aria-label="Opciones de respuesta"></div>
+        <div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div>
+        <button id="next-button" class="button button-primary" type="button" hidden>Siguiente desafío</button>
+      </section>
+
+      <section id="end-screen" class="card screen" hidden aria-labelledby="end-heading">
+        <div class="virtue-icon" aria-hidden="true">🏅</div>
+        <h2 id="end-heading">¡Terminaste la ruta!</h2>
+        <p id="final-message" class="final-message"></p>
+        <p class="final-score">Resultado: <strong id="final-score">0</strong> de <span id="final-total">10</span>.</p>
+        <p>La virtud se fortalece al practicar elecciones equilibradas y orientadas al bien común.</p>
+        <button id="restart-button" class="button button-primary" type="button">Jugar de nuevo</button>
+      </section>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
